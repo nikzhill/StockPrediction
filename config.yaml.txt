@@ -1,0 +1,65 @@
+# StockPrediction configuration
+project:
+  name: StockPrediction
+  root: .
+
+paths:
+  data_dir: data
+  raw_dir: data/raw
+  processed_dir: data/processed
+  sentiment_dir: data/sentiment
+  models_dir: models
+  notebooks_dir: notebooks
+
+tickers:
+  - AAPL
+  - MSFT
+  - INFY.NS
+
+date_range:
+  start_date: "2022-01-01"
+  end_date: "2025-09-10"
+
+model:
+  xgboost_params:
+    objective: "reg:squarederror"
+    n_estimators: 200
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+  test_size: 0.2
+  random_state: 42
+  model_filename: "models/xgb_model.joblib"
+  metrics_filename: "models/metrics.json"
+
+features:
+  ma_windows: [5, 10, 20, 50]
+  rsi_period: 14
+  atr_period: 14
+  use_volume: true
+  lag_days: 1
+
+sentiment:
+  provider: "vader"
+  aggregation: "daily"
+  vader_lexicon_download: true
+
+alerts:
+  price_change_pct: 3.0
+  sentiment_score_threshold: -0.3
+  watchlist_file: "data/sentiment/watchlist.csv"
+
+training:
+  save_model: true
+  models_dir: "models"
+  save_metrics: true
+
+streamlit:
+  app_port: 8501
+  app_host: "0.0.0.0"
+
+logging:
+  level: "INFO"
+  logfile: "logs/run.log"

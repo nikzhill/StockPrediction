@@ -1,0 +1,13 @@
+{
+  "ticker": "AAPL",
+  "n_texts": 3,
+  "n_sentences": 3,
+  "date_range": [
+    "2025-09-01",
+    "2025-09-03"
+  ],
+  "output_files": {
+    "raw": "data\\sentiment\\AAPL_sentiment_raw.csv",
+    "daily": "data\\sentiment\\AAPL_sentiment_daily.csv"
+  }
+}

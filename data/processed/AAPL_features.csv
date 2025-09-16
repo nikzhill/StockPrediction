@@ -1,0 +1,4 @@
+date,open,high,low,close,volume,ma_5,ma_10,ma_20,ma_50,rsi,atr,close_lag,ticker,source,n_items,mean_compound,median_compound,std_compound,pos_mean,neg_mean,neu_mean,sentiment_label
+2025-09-01,150,152,149,151,1000000,,,,,,0.0,,,,,0.0,,,,,,neutral
+2025-09-02,151,153,150,152,1100000,,,,,,0.0,151.0,,,,0.0,,,,,,neutral
+2025-09-03,152,154,151,153,1050000,,,,,,3.0,152.0,,,,0.0,,,,,,neutral
