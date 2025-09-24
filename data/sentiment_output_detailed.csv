@@ -1,0 +1,7 @@
+date,text,neg,neu,pos,compound
+2025-09-01,Apple stock rises after strong iPhone sales report,0.0,0.667,0.333,0.5423
+2025-09-02,Tesla faces production delays due to supply chain issues,0.0,1.0,0.0,0.0
+2025-09-03,Microsoft announces AI partnership to boost cloud services,0.0,0.722,0.278,0.4019
+2025-09-04,Google fined for antitrust violations in the EU,0.327,0.673,0.0,-0.5267
+2025-09-05,Infosys reports record quarterly revenue beating expectations,0.0,0.6,0.4,0.6124
+2025-09-06,TCS launches new digital platform for global clients,0.0,1.0,0.0,0.0

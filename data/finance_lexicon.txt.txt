@@ -1,0 +1,10 @@
+bullish 2.5
+bearish -2.5
+profit 2.0
+loss -2.0
+growth 1.5
+decline -1.5
+upgrade 1.8
+downgrade -1.8
+strong 1.5
+weak -1.5
