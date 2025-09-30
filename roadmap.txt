@@ -1,0 +1,93 @@
+
+
+## **📌 Roadmap for Stock Prediction Project**
+
+---
+
+### **Step 1: Improve Prediction Accuracy**
+
+**Goal:** Make your AI predictions reliable (reduce MAPE and error).
+
+**Actions:**
+
+1. **Expand historical data:**
+
+   * Increase window from 90 days → 180 or 365 days.
+   * More data = better pattern recognition.
+
+2. **Feature engineering:**
+
+   * Add technical indicators:
+
+     * MACD, Bollinger Bands, OBV, ATR.
+   * Include log returns or daily % change as target instead of raw Close price.
+
+3. **Hyperparameter tuning (XGBoost):**
+
+   * Tune `max_depth`, `n_estimators`, `learning_rate`, `subsample`, `colsample_bytree`.
+   * Use GridSearchCV / RandomizedSearchCV.
+
+4. **Evaluation:**
+
+   * Track **MAPE, RMSE, MAE** per ticker.
+   * Compare before/after tuning to validate improvement.
+
+**Output:** Optimized models for all current tickers.
+
+---
+
+### **Step 2: Complete Sentiment Analysis Agent & Dashboard Integration**
+
+**Goal:** Include news sentiment as a feature and show it in the dashboard.
+
+**Actions:**
+
+1. **Complete sentiment agent:**
+
+   * Ensure news articles are fetched, cleaned, and sentiment scores generated.
+   * Assign scores to the respective tickers.
+
+2. **Integrate with dashboard:**
+
+   * Add a column in prediction CSV/Excel for sentiment score.
+   * Display in Streamlit dashboard (line chart / gauge / colored labels).
+
+3. **Optional:** Use sentiment as a feature for XGBoost (advanced step).
+
+**Output:** Sentiment scores calculated and visible on dashboard, possibly improving prediction if used as input.
+
+---
+
+### **Step 3: Add More Indian Companies**
+
+**Goal:** Scale your project with additional NSE tickers.
+
+**Actions:**
+
+1. Update `TICKERS` list with new Indian companies (e.g., TCS.NS, HDFCBANK.NS, RELIANCE.NS).
+2. Ensure **XGBoost models exist** for each ticker; train new ones if needed using your improved pipeline.
+3. Fetch historical data, calculate features, run predictions.
+4. Confirm logging in CSV/Excel works for all new tickers.
+
+**Output:** Expanded coverage of Indian stocks without breaking existing functionality.
+
+---
+
+### **Step 4: Implement Watchlist and Alert System**
+
+**Goal:** Notify users when predicted prices cross thresholds or sentiment is extreme.
+
+**Actions:**
+
+1. Add a **watchlist feature** in your dashboard: user selects tickers to monitor.
+2. Define **alert conditions:**
+
+   * Price > predicted target
+   * Price < predicted target
+   * Extreme positive/negative sentiment
+3. Implement **alerts:**
+
+   * Streamlit pop-ups, colored highlights, or email notifications.
+4. Test the alert system with multiple tickers to ensure robustness.
+
+**Output:** Interactive watchlist and alert system for active stock monitoring.

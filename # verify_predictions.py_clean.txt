@@ -4,15 +4,11 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
 import joblib
-import warnings
-
-warnings.simplefilter(action="ignore", category=FutureWarning)
-
 
 # ----------------------------
 # Configuration
 # ----------------------------
-TICKERS = ["AAPL", "GOOGL", "MSFT", "TSLA", "INFY.NS", "TCS.NS"]
+TICKERS = ["AAPL", "GOOGL", "MSFT", "TSLA", "INFY.NS"]
 MODEL_DIR = "models"
 LOG_FILE = "predictions_summary.csv"
 
@@ -60,14 +56,11 @@ def make_prediction(ticker):
     # Fetch last 90 days of stock data
     end = datetime.today()
     start = end - timedelta(days=90)
-    df = yf.download(ticker, start=start, end=end, progress=False)
+    df = yf.download(ticker, start=start, end=end)
     if df.empty:
         print(f"[❌] No data for {ticker}")
         return None
     df.reset_index(inplace=True)
-
-    # Ensure Date column is proper datetime
-    df["Date"] = pd.to_datetime(df["Date"])
 
     # Technical indicators
     df["SMA_10"] = df["Close"].rolling(10).mean()
@@ -93,32 +86,20 @@ def make_prediction(ticker):
     # Predict
     try:
         predicted_close = model.predict(features)[0]
-        predicted_close = float(predicted_close)  # ensure numeric
     except Exception as e:
         print(f"[❌] Prediction failed for {ticker}: {e}")
         return None
 
-    # Actual close
-    try:
-        actual_close = float(latest["Close"])  # ensure numeric
-    except Exception as e:
-        print(f"[❌] Invalid actual close for {ticker}: {e}")
-        return None
-
-    error = round(predicted_close - actual_close, 2)
-    mape = round(abs(error / actual_close) * 100, 2)
-
-    # ✅ Fix: ensure scalar datetime
-    # ✅ Fix: safely extract latest date
-    latest_date = pd.to_datetime(df["Date"].iloc[-1]).to_pydatetime()
+    # ⚡ Correct scalar date extraction
+    latest_date = pd.to_datetime(latest["Date"].item())
 
     return {
         "date": latest_date.strftime("%Y-%m-%d"),
         "stock": ticker,
-        "predicted_close": round(predicted_close, 2),
-        "actual_close": round(actual_close, 2),
-        "error": error,
-        "mape(%)": mape,
+        "predicted_close": round(float(predicted_close), 2),
+        "actual_close": None,
+        "error": None,
+        "mape(%)": None,
     }
 
 
@@ -166,42 +147,8 @@ def main():
     if new_rows:
         log_df = pd.concat([log_df, pd.DataFrame(new_rows)], ignore_index=True)
 
-    # Save to CSV
     log_df.to_csv(LOG_FILE, index=False)
     print("\n[📁] Predictions saved to", LOG_FILE)
-
-    # Save to Excel
-    excel_file = LOG_FILE.replace(".csv", ".xlsx")
-    try:
-        log_df.to_excel(excel_file, index=False)
-        print("[📁] Predictions also saved to", excel_file)
-    except PermissionError:
-        print(
-            f"[⚠️] Could not write {excel_file}: File is open, please close and rerun."
-        )
-
-    # Add summary safely
-    try:
-        # Convert columns to numeric
-        log_df["mape(%)"] = pd.to_numeric(log_df["mape(%)"], errors="coerce")
-        log_df["error"] = pd.to_numeric(log_df["error"], errors="coerce")
-
-        summary = pd.DataFrame(
-            {
-                "Metric": ["Average MAPE (%)", "Average Error"],
-                "Value": [
-                    round(log_df["mape(%)"].mean(), 2),
-                    round(log_df["error"].mean(), 2),
-                ],
-            }
-        )
-
-        with pd.ExcelWriter(excel_file, mode="a", engine="openpyxl") as writer:
-            summary.to_excel(writer, index=False, sheet_name="Summary")
-        print("[📊] Summary added to Excel file")
-    except Exception as e:
-        print(f"[❌] Could not add summary: {e}")
-
     if new_rows:
         print("[➕] Added predictions for:", ", ".join([r["stock"] for r in new_rows]))
 
